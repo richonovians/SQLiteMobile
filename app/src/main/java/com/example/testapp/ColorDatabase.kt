@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 @Database(entities = [Color::class], version = 1)
 abstract class ColorDatabase: RoomDatabase() {
 
-    abstract fun ColorDao(): ColorDao
+    abstract fun colorDao(): ColorDao
 
     companion object{
         private var INSTANCE: ColorDatabase? = null
@@ -18,8 +18,8 @@ abstract class ColorDatabase: RoomDatabase() {
                 Room.databaseBuilder(
                     context.applicationContext,
                     ColorDatabase::class.java, "color_database"
-                ).setJournalMode(RoomDatabase.JournalMode.TRUNCATE) // Gunakan TRUNCATE untuk hanya menyimpan 1 file database
-                    .build()
+                ).fallbackToDestructiveMigrationFrom()
+                    .build().also { INSTANCE = it }
             }
         }
     }

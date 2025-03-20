@@ -6,6 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
@@ -20,15 +24,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         val db = ColorDatabase.getInstance(this)
-        val executor = Executors.newSingleThreadExecutor() // Buat background thread
 
-        executor.execute {
-            val colorRed = Color(hexColor = "#ff0000", name = "Red") // Jangan isi ID
-            db.ColorDao().insert(colorRed)
+        GlobalScope.launch {
+            val colorRed = Color(hexColor = "#ff0000", name = "Red")
+            val colorBlue = Color(hexColor = "#0000ff", name = "Blue")
+            val colorGreen = Color(hexColor = "#00ff00", name = "Green")
+            db.colorDao().insert(colorRed, colorBlue, colorGreen)
 
             // Cek apakah data masuk
-            val colors = db.ColorDao().getAll()
+            val colors = db.colorDao().getAll()
             Log.d("Database", "Colors in DB: $colors")
+        }
+
+        val x = lifecycleScope.async {
+            Thread.sleep(1000)
         }
     }
 }
