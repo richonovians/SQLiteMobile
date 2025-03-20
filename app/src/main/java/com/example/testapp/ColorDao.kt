@@ -1,10 +1,14 @@
 package com.example.testapp
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface ColorDao {
-    @Query("SELECT * FROM Color")
+    @Query("SELECT * FROM colors")
     suspend fun getAll(): Array<Color>
 
     @Insert
